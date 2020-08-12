@@ -10,23 +10,28 @@
 <body>
     <div class="content">
         <h1>MyDiary</h1>
-        <form action="/api/addNote" method="POST">
-            <label for="comments">Additional Comments</label>
-            <input type="text" name='title'>
-            <textarea id="comments" name='body'></textarea>
-            <input type="submit" value="Create Note">
-        </form>
 
-        {% for note in value %}
-            <div class="card mx-auto" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ note.get_title() }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ note.get_timestamp() }}</h6>
-                    <p class="card-text">{{ note.get_body() }}</p>
-                    <a href="/api/remove/{{note.get_id_note()}}" class="btn btn-danger">Remove</a>
-                </div>
-            </div>
-        {% endfor %}
+            {% if session['logged'] %}
+
+                <form action="/api/addNote" method="POST">
+                    <label for="comments">Additional Comments</label>
+                    <input type="text" name='title'>
+                    <textarea id="comments" name='body'></textarea>
+                    <input type="submit" value="Create Note">
+                </form>
+
+                {% for note in value %}
+                    <div class="card mx-auto" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ note.get_title() }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ note.get_timestamp() }}</h6>
+                            <p class="card-text">{{ note.get_body() }}</p>
+                            <a href="/api/remove/{{note.get_id_note()}}" class="btn btn-danger">Remove</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            
+            {% endif %}
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </body>

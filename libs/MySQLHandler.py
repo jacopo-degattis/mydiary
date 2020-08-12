@@ -38,14 +38,40 @@ class MySQLHandler(object):
             msg = False
         return msg
 
+    def get_id_from_username(self, username):
+        query = f'SELECT id_utente FROM User WHERE username="{username}"'
+        self.execute(query)
+        return self.results[0][0]
+
+    def checkLogin(self, username, password):
+        success = None
+        query = f'SELECT * FROM User WHERE username="{username}" AND password="{password}"'
+        self.execute(query)
+        if self.results:
+            success = self.get_id_from_username(username)
+        else:
+            success = None
+        return success
+
+    def addUser(self, first_name, last_name, email, username, password):
+        query = f'''INSERT INTO User (first_name, last_name, email, username, password)
+                    VALUES ("{first_name}","{last_name}","{email}","{username}","{password}")'''
+        return self.execute(query)
+
+    def get_username_from_id(self, id_utente):
+        query = f'SELECT username FROM User WHERE id_utente={id_utente}'
+        self.execute(query)
+        print(self.results)
+
     def get_all_notes(self):
         query = 'SELECT * FROM Note'
         status = self.execute(query)
         notes_list = []
         if self.results:
             for note in self.results:
+                self.get_username_from_id(note[4])
                 notes_list.append(
-                    Note(note[0], note[1], note[2], note[3])
+                    Note(note[0], note[1], note[2], note[4], note[3])
                 )
         return notes_list
 
@@ -53,9 +79,9 @@ class MySQLHandler(object):
         query = f'DELETE FROM Note WHERE id_note={id_note}'
         return self.execute(query)
 
-    def addNote(self, title, body):
+    def addNote(self, title, body, id_utente):
         # AGGIUNGERE POI UTENTI, QUINDI AGGIUNGERE NEL DB ID_UTENTE --> CHIAVE ESTERNA
-        query = f'INSERT INTO Note (title, body) VALUES ("{title}", "{body}")'
+        query = f'INSERT INTO Note (title, body, id_utente) VALUES ("{title}", "{body}", {id_utente})'
         return self.execute(query)
 
 
