@@ -1,0 +1,31 @@
+.content {
+    margin: auto;
+    max-width: 1200px;
+    /* background-color: #333; */
+    text-align: center;
+    color: white;
+    height: 100vh;
+    padding-top: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form {
+    margin: auto;
+    max-width: 500px;
+}
+
+#comments {
+    margin-bottom: 50px;
+}
+
+body {
+    margin: 0;
+}
+
+.card {
+    margin-top: 50px;
+}
+
+.card-text {
+    color: black;
+}
