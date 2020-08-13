@@ -61,7 +61,7 @@ class MySQLHandler(object):
     def get_username_from_id(self, id_utente):
         query = f'SELECT username FROM User WHERE id_utente={id_utente}'
         self.execute(query)
-        print(self.results)
+        return self.results[0][0]
 
     def get_all_notes(self):
         query = 'SELECT * FROM Note'
@@ -69,9 +69,9 @@ class MySQLHandler(object):
         notes_list = []
         if self.results:
             for note in self.results:
-                self.get_username_from_id(note[4])
+                curr_note_user = self.get_username_from_id(note[4])
                 notes_list.append(
-                    Note(note[0], note[1], note[2], note[4], note[3])
+                    Note(note[0], note[1], note[2], curr_note_user, note[3])
                 )
         return notes_list
 

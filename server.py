@@ -11,11 +11,18 @@ app.secret_key = secrets.token_bytes()
 @app.route('/')
 def homepage():
     notes = handler.get_all_notes()
-    return render_template('index.html', value=notes)
+
+    return render_template('index.html', value=notes[::-1])
 
 @app.route('/login', methods=['GET'])
 def login():
     return render_template('login.html')
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('logged')
+    session.pop('curr_id')
+    return redirect('/')
 
 @app.route('/signup', methods=['GET'])
 def signup():

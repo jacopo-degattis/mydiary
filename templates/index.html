@@ -9,28 +9,61 @@
 </head>
 <body>
     <div class="content">
-        <h1>MyDiary</h1>
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="/static/img/logo.png" width="30" height="30" alt="">
+            </a>
+            <a class="navbar-brand" href="#">MyDiary</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    {% if session['logged'] %}
+                        <li class="nav-item">
+                            <a href="/logout">
+                                <button class="btn btn-danger">Logout</button>
+                            </a>
+                        </li>
+                            
+                        <!-- <li class="nav-item">
+                            <button class="btn btn-primary ml-auto">Create Note</button>
+                        </li> -->
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="/login">
+                                <button class="btn btn-success">Login</button>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+              
+                
+            </div>
+          </nav>
+
+
+        <!-- <h1>MyDiary</h1> -->
 
             {% if session['logged'] %}
 
                 <form action="/api/addNote" method="POST">
                     <label for="comments">Additional Comments</label>
-                    <input type="text" name='title'>
-                    <textarea id="comments" name='body'></textarea>
+                    <input placeholder="Note Title" type="text" name='title'>
+                    <textarea placeholder="Note Body" id="comments" name='body'></textarea>
                     <input type="submit" value="Create Note">
                 </form>
 
                 {% for note in value %}
                     <div class="card mx-auto" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">{{ note.get_title() }}</h5>
+                            <h5 class="card-title">{{ note.get_title() }} - {{ note.get_author() }}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{{ note.get_timestamp() }}</h6>
                             <p class="card-text">{{ note.get_body() }}</p>
                             <a href="/api/remove/{{note.get_id_note()}}" class="btn btn-danger">Remove</a>
                         </div>
                     </div>
                 {% endfor %}
-            
+
+            {% else %}
+                <h1>You must login first!</h1>
             {% endif %}
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
