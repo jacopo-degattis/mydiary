@@ -5,67 +5,96 @@
     <title>MyDiary</title>
     <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="https://taniarascia.github.io/primitive/css/main.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
+    <link href="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/css/halfmoon.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="content">
-        <nav class="navbar navbar-expand-md navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="/static/img/logo.png" width="30" height="30" alt="">
+    <div class="page-wrapper with-navbar">
+
+        <!-- Navbar with content justified between -->
+        <nav class="navbar justify-content-between"> <!-- justify-content-between = justify-content: space-between -->
+            <!-- Navbar content with menu button -->
+            <div class="navbar-content">
+            <a href='/notesList'>
+            <button class="btn" type="button">
+                <i class="fa fa-bars" aria-hidden="true"></i> 
+                Notes List
+            </button>
             </a>
-            <a class="navbar-brand" href="#">MyDiary</a>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    {% if session['logged'] %}
-                        <li class="nav-item">
-                            <a href="/logout">
-                                <button class="btn btn-danger">Logout</button>
-                            </a>
-                        </li>
-                            
-                        <!-- <li class="nav-item">
-                            <button class="btn btn-primary ml-auto">Create Note</button>
-                        </li> -->
-                    {% else %}
-                        <li class="nav-item">
-                            <a href="/login">
-                                <button class="btn btn-success">Login</button>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-              
-                
             </div>
-          </nav>
+            <!-- Navbar brand -->
+            <a href="#" class="navbar-brand">
+            <img src="/static/img/logo.png">
+            MyDiary
+            </a>
+            <!-- Navbar content with sign up button -->
+            <div class="navbar-content">
+                {% if session['logged'] %}
+                    <a href='/logout'>
+                        <button class="btn btn-primary" type="button">Logout</button>
+                    </a>
+                {% else %}
+                    <a href='/login'>           
+                        <button class="btn btn-primary" type="button">Login</button>
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
 
+        <div class="content-wrapper">
 
-        <!-- <h1>MyDiary</h1> -->
+            <!-- <div class="date-clock">
+                <font id='today-text'>Today is</font>
+                <div class="current-clock">
+
+                </div>
+            </div> -->
 
             {% if session['logged'] %}
 
-                <form action="/api/addNote" method="POST">
-                    <label for="comments">Additional Comments</label>
-                    <input placeholder="Note Title" type="text" name='title'>
-                    <textarea placeholder="Note Body" id="comments" name='body'></textarea>
-                    <input type="submit" value="Create Note">
-                </form>
+            <form action="/api/addNote" id='send-form' method="POST" class="w-400 mw-full">
+                <div class="form-group">
+                <label for="title" class="required">Note Title</label>
+                <input type="text" class="form-control" name='title' id="title" placeholder="Title" required="required">
+                </div>
 
-                {% for note in value %}
-                    <div class="card mx-auto" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ note.get_title() }} - {{ note.get_author() }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ note.get_timestamp() }}</h6>
-                            <p class="card-text">{{ note.get_body() }}</p>
-                            <a href="/api/remove/{{note.get_id_note()}}" class="btn btn-danger">Remove</a>
-                        </div>
+                <!-- Textarea -->
+                <div class="form-group">
+                    <label for="description">Note Body</label>
+                    <textarea class="form-control" name='body' id="notebody" placeholder="Write note body in here." required="required"></textarea>
+                </div>
+            
+                <!-- <div class="custom-switch">
+                    <label for="switch-1">Switch 1</label>
+                    <input type="checkbox" id="switch-1" value="">
+                </div> -->
+
+                <!--type="submit"-->
+                <input class="btn btn-primary" id='submit-note' type="submit"  onclick="addNote();" value="Create Note">
+
+                {% if value == 200 %}
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Note Succesfully created</h4>
+                        Your note has been Succesfully created!. Thanks
                     </div>
-                {% endfor %}
+                {% elif value == 400 %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Unable to create a note</h4>
+                        An error occurred while creating the Note. Please try again later.
+                    </div>
+                {% endif %}
 
-            {% else %}
-                <h1>You must login first!</h1>
+            </form>
             {% endif %}
+        </div>
     </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <script src='/static/js/main.js'></script>
+    <script src="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/js/halfmoon.min.js"></script>
+    <script>
+        halfmoon.toggleDarkMode();
+        // dateClock();
+    </script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> -->
 </body>
 </html>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
 .content {
     margin: auto;
     max-width: 1200px;
@@ -27,6 +29,29 @@ form {
 }
 
 #comments {
+    margin-bottom: 50px;
+}
+
+#today-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem;
+}
+
+.current-clock {
+    height: 300px;
+}
+
+.date-clock {
+    font-family: "Montserrat";
+    height: 300px;
+    margin: auto;
+    max-width: 500px;
+    background-color: #1890ff;
+    text-align: center;
+    border-radius: 20px;
+}
+
+#submit-note {
     margin-bottom: 50px;
 }
 

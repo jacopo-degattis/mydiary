@@ -1,7 +1,7 @@
 import secrets
 import hashlib
 from libs.MySQLHandler import MySQLHandler
-from flask import Flask, render_template, jsonify, request, session, redirect
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 
 app = Flask(__name__)
 handler = MySQLHandler()
@@ -10,9 +10,9 @@ app.secret_key = secrets.token_bytes()
 
 @app.route('/')
 def homepage():
-    notes = handler.get_all_notes()
-
-    return render_template('index.html', value=notes[::-1])
+    #notes = handler.get_all_notes()
+    # return render_template('index.html', value=notes[::-1])
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -28,10 +28,15 @@ def logout():
 def signup():
     return render_template('signup.html')
 
+@app.route('/notesList', methods=['GET'])
+def notesList():
+    #notes = handler.get_all_notes() # Visualizzare solo le note associate all'utente
+    notes = handler.get_notes_by_user_id(session['curr_id'])
+    return render_template('notesList.html', value=notes[::-1])
+
 @app.route('/api/newUser', methods=['POST'])
 def newUser():
     try:
-
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         email = request.form['email']
@@ -52,7 +57,6 @@ def newUser():
 @app.route('/api/login', methods=['POST'])
 def userLogin():
     try:
-        
         username = request.form['username']
         password = hashlib.md5(request.form['password'].encode()).hexdigest()
 
@@ -60,6 +64,7 @@ def userLogin():
         if login:
             session['logged'] = True 
             session['curr_id'] = login
+            session['curr_username'] = username
             return redirect('/') # Aggiungere login corretto con la sessione
         else:
             session['logged'] = False
@@ -82,8 +87,9 @@ def addNote():
         print(e)
         data = {'response': 'error', 'status_code': 400}
 
-    #return jsonify(data) 
-    return redirect('/')
+    # return jsonify(data) 
+    # return redirect('/')
+    return render_template('index.html', value=data['status_code'])
 
 @app.route('/api/remove/<id_note>', methods=['GET'])
 def removeNote(id_note):

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Notes List</title>
+    <link href="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/css/halfmoon.min.css" rel="stylesheet" />
+</head>
+<body>
+    
+    <style>
+        .content-wrapper {
+            max-width: 1200px;
+            margin: auto;
+        }
+    </style>
+
+    <div class="page-wrapper with-navbar">
+
+        <!-- Navbar with content justified between -->
+        <nav class="navbar justify-content-between"> <!-- justify-content-between = justify-content: space-between -->
+            <!-- Navbar content with menu button -->
+            <div class="navbar-content">
+            <a href='/'>
+            <button class="btn" type="button">
+                <i class="fa fa-bars" aria-hidden="true"></i> 
+                Create
+            </button>
+            </a>
+            </div>
+            <!-- Navbar brand -->
+            <a href="#" class="navbar-brand">
+            <img src="/static/img/logo.png">
+            MyDiary
+            </a>
+            <!-- Navbar content with sign up button -->
+            <div class="navbar-content">
+                {% if session['logged'] %}
+                    <a href='/logout'>
+                        <button class="btn btn-primary" type="button">Logout</button>
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="content-wrapper">
+
+            {% for note in value %}
+                <div class="card">
+                    <h2 class="card-title">
+                    {{note.get_title()}}
+                    </h2>
+                    <p>
+                    {{note.get_body()}}
+                    </p>
+                    <div class="text-right"> <!-- text-right = text-align: right -->
+                    <a href="/api/remove/{{note.get_id_note()}}" class="btn">Remove</a>
+                    </div>
+                </div>
+           
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/js/halfmoon.min.js"></script>
+    <script>
+        halfmoon.toggleDarkMode();
+    </script>
+</body>
+</html>

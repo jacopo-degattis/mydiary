@@ -1,12 +1,13 @@
 
 class Note(object):
 
-    def __init__(self, id_note, title, body, author, timestamp):
+    def __init__(self, id_note, title, body, author, timestamp, private):
         self.id_note = id_note
         self.title = title
         self.body = body
         self.author = author
         self.timestamp = timestamp
+        self.private = private
 
     def get_id_note(self):
         return self.id_note
@@ -22,3 +23,6 @@ class Note(object):
 
     def get_timestamp(self):
         return self.timestamp
+
+    def get_private(self):
+        return self.private
